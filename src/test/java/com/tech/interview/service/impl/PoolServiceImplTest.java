@@ -21,20 +21,20 @@ import java.util.Arrays;
 
 
 @SpringBootTest
-class PoolServiceImplTest {
+public class PoolServiceImplTest {
 
   @Autowired
   private PoolService service;
 
   @BeforeEach
-  void setUp() {
+  public void setUp() {
     for (int i = 0; i < 10; i++) {
       PoolStorage.set(PoolModel.of(i, generateList()));
     }
   }
 
   @AfterEach
-  void tearDown() {
+  public void tearDown() {
     PoolStorage.clear();
   }
 
@@ -43,7 +43,7 @@ class PoolServiceImplTest {
   }
 
   @Test
-  void updatePoolNotExisted() {
+  public void updatePoolNotExisted() {
     UpdateDTO input = new UpdateDTO();
     input.setPoolId(11);
     input.setPoolValues(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)));
@@ -52,7 +52,7 @@ class PoolServiceImplTest {
   }
 
   @Test
-  void updatePoolExisted() {
+  public void updatePoolExisted() {
     UpdateDTO input = new UpdateDTO();
     input.setPoolId(1);
     input.setPoolValues(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5)));
@@ -61,7 +61,7 @@ class PoolServiceImplTest {
   }
 
   @Test
-  void queryPoolExisted() {
+  public void queryPoolExisted() {
     QueryDTO input = new QueryDTO();
     input.setPercentile(50.0);
     input.setPoolId(3);
@@ -73,7 +73,7 @@ class PoolServiceImplTest {
   }
 
   @Test
-  void queryPoolNotExisted() {
+  public void queryPoolNotExisted() {
     QueryDTO input = new QueryDTO();
     input.setPercentile(50.0);
     input.setPoolId(13);
