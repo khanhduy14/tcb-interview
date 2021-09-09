@@ -5,9 +5,11 @@ import com.tech.interview.dto.request.QueryDTO;
 import com.tech.interview.dto.request.UpdateDTO;
 import com.tech.interview.dto.response.QueryResDTO;
 import com.tech.interview.dto.response.UpdateResDTO;
+import com.tech.interview.exception.BaseException;
 import com.tech.interview.model.PoolModel;
 import com.tech.interview.service.PoolService;
 import com.tech.interview.storage.PoolStorage;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,12 +36,18 @@ public class PoolServiceImpl implements PoolService {
   @Override
   public QueryResDTO query(QueryDTO input) {
     if (PoolStorage.get(input.getPoolId()) == null) {
-      return null;
+      throw new BaseException(HttpStatus.NOT_FOUND, "PoolId " + input.getPoolId() + " not found");
     } else {
       PoolModel model = PoolStorage.get(input.getPoolId());
-      Integer count = model.getPoolValues().size();
-      int quantile = (int) ((double) count * input.getPercentile() / (double) 100);
-      return QueryResDTO.of(model.getPoolValues().get(quantile), count);
+      int count = model.getPoolValues().size();
+      if (input.getPercentile() == 0) {
+        return QueryResDTO.of(model.getPoolValues().get(0), count);
+      }
+      if (input.getPercentile() == 100) {
+        return QueryResDTO.of(model.getPoolValues().get(count - 1), count);
+      }
+      int quantile = (int) ((double) (count + 1) * input.getPercentile() / 100.0);
+      return QueryResDTO.of(model.getPoolValues().get(quantile - 1), count);
     }
   }
 

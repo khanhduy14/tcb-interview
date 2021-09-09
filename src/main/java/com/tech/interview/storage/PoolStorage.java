@@ -1,8 +1,6 @@
 package com.tech.interview.storage;
 
-import com.tech.interview.exception.BaseException;
 import com.tech.interview.model.PoolModel;
-import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 

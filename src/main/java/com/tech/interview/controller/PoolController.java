@@ -36,9 +36,6 @@ public class PoolController {
   public ResponseEntity<QueryResDTO> query(@Valid @RequestBody QueryDTO input) {
     log.info("(query)object: {}", input);
     QueryResDTO result = service.query(input);
-    if (result == null) {
-      return ResponseEntity.notFound().build();
-    }
     return ResponseEntity.ok(result);
   }
 }
