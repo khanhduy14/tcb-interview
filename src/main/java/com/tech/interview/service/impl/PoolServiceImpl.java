@@ -46,7 +46,7 @@ public class PoolServiceImpl implements PoolService {
       if (input.getPercentile() == 100) {
         return QueryResDTO.of(model.getPoolValues().get(count - 1), count);
       }
-      int quantile = (int) ((double) (count + 1) * input.getPercentile() / 100.0);
+      int quantile = (int) Math.round((double) (count) * input.getPercentile() / 100.0);
       return QueryResDTO.of(model.getPoolValues().get(quantile - 1), count);
     }
   }
