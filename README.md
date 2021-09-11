@@ -31,12 +31,12 @@ Because poolValues is sorted, 'i' is the index in the array
 - Once successfully built, you can run the service by running `./mvnw spring-boot:run`
 
 Once the application runs you should see something like this
-![](.\assets\app_run_success.png)
+![](assets/app_run_success.png)
 
 ## Test endpoints with swagger
 
 Using swagger for test endpoints: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-![](.\assets\swagger.png)
+![](assets/swagger.png)
 
 ## HA-SCALABILITY
 High Availability: High availability is when your apps remain available and accessible without any interruption and serve their intended function seamlessly.
@@ -46,11 +46,11 @@ With this problem, I propose 2 ways to implement:
 - Container Architecture (Spring + Docker): 
   - Use docker to containerize services
   - Deploy spring cloud eureka server with peer awareness configuration
-![](.\assets\HA_Spring_Cloud.png)
+![](assets/HA_Spring_Cloud.png)
 - Serverless Architecture (AWS): 
   - Use API Gateway to create and manage Rest API
   - API Gateway integration with Lambda Function to perform insert, append or query **pool** data stored on DynamoDB
-![](.\assets\serverless.png)
+![](assets/serverless.png)
 
 --> Each architecture will respond to different circumstances. Container Architecture is suitable if you need to strictly manage resources or deploy on an on-premise environment. As for Serverless Architecture, the management will be managed by AWS, so just focus on the business development side.
 
