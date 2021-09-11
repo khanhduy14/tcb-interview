@@ -1,43 +1,56 @@
 # TECHCOMBACK INTERVIEW
 
-Sản phẩm em sử dụng java spring boot để phát triển. Ứng dụng cung cấp 2 endpoints: 
-- POST /update : Tạo mới hoặc cập nhập pool 
-- POST /query : Tính giá trị quantile dựa trên poolId và percentile
+This is a Java / Maven / Spring Boot application.
 
-Để trực quan hóa và để test endpoints em có tích hợp swagger vào sản phẩm.
+## DESIGN
+The application is built on top of spring boot architecture, consist:
+- Controller: Handles the HTTP requests, translates the JSON parameter to object
+- Service: Handles all the business logic
+- Exception: Handles exception
 
-### DESIGN
+For simplicity, I used **HashMap** instead of database to storage. It is initialized at `com/tech/interview/storage/PoolStorage.java`
 
-#### Architecture
-
-- Presentation Layer : Xử lý các request (controller)
-- Business Layer : Chứa các logic nghiệp vụ (service)
-- Persistence Layer : Cung cấp các chức năng lưu trữ (model, storage)
-
-Để đơn giản nên em không sử dụng Database mà thay vào đó em sử dụng một **HashMap** để lưu trữ dữ liệu các pool với key là các poolId
-
-#### How to calculate quantile
-
-Em sử dụng thuật toán nearest-rank để tính giá trị quantile.
-
-Trước khi lưu vào static map em sẽ sắp xếp poolValues theo thứ tự tăng dần. Khi query em chỉ cần lấy ra với index = [n * percentile / 100] với n là số lượng phần tử của poolValues\
-[https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method
+### Calculate quantile
+To calculate quantile value I use nearest-rank algorithm [https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method
 ](https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method)
 
-### HOW TO RUN
 
-- Requirement: 
-  - Jdk1.8
-  - maven
-- Test Command: `./mvnw test`
-- Run Command: `./mvnw spring-boot:run`
+#### Implement nearest-rank algorithm
+Assume the number of request query will be significantly more than the number of request update pool!\
+Since the condition is assumed, when the pool is INSERT or APPEND I will sort the poolValues in ascending order.\
+So with nearest-rank algorithm <img src="http://www.sciweavers.org/tex2img.php?eq=i%20%3D%20N%20%2A%20%20%5Cfrac%7Bpercentile%7D%7B100%7D%20&bc=White&fc=Black&im=jpg&fs=12&ff=arev&edit=0" align="center" border="0" alt="i = N *  \frac{percentile}{100} " width="156" height="43" />\
+N: the total count of elements in the pool\
+i: rank corresponding to the percentile value
 
+Because poolValues is sorted, 'i' is the index in the array
 
-### Test endpoints with swagger
+## HOW TO RUN
+
+- Make sure you are using JDK 1.8
+- You can build the project and run the tests by running `./mvnw clean package`
+- Once successfully built, you can run the service by running `./mvnw spring-boot:run`
+
+Once the application runs you should see something like this
+![](.\assets\app_run_success.png)
+
+## Test endpoints with swagger
 
 Using swagger for test endpoints: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+![](.\assets\swagger.png)
 
-### HA-SCALABILITY
-HA là kiến trúc làm tăng tính sẵn sãng của các endpoints nghĩa là khi client gửi request đến thì luôn có ít nhất 1 server trong trạng thái sẵn sàng phục vụ trong bất kỳ hoản cảnh nào.\
-Scalability là tăng khả năng xử lý công việc của một hệ thống. \
-Với bài toán này có thể tận dụng kiến trúc serverless của AWS để xây dựng các endpoints (API Gateway, Lambda, DynamoDB ...)
+## HA-SCALABILITY
+High Availability: High availability is when your apps remain available and accessible without any interruption and serve their intended function seamlessly.
+Scalability: Scalability simply refers to the ability of an application or a system to handle a huge volume of workload or expand in response to an increased demand.
+
+With this problem, I propose 2 ways to implement:
+- Container Architecture (Spring + Docker): 
+  - Use docker to containerize services
+  - Deploy spring cloud eureka server with peer awareness configuration
+![](.\assets\HA_Spring_Cloud.png)
+- Serverless Architecture (AWS): 
+  - Use API Gateway to create and manage Rest API
+  - API Gateway integration with Lambda Function to perform insert, append or query **pool** data stored on DynamoDB
+![](.\assets\serverless.png)
+
+--> Each architecture will respond to different circumstances. Container Architecture is suitable if you need to strictly manage resources or deploy on an on-premise environment. As for Serverless Architecture, the management will be managed by AWS, so just focus on the business development side.
+
