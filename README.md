@@ -42,7 +42,7 @@ Using swagger for test endpoints: [http://localhost:8080/swagger-ui.html](http:/
 High Availability: High availability is when your apps remain available and accessible without any interruption and serve their intended function seamlessly.
 Scalability: Scalability simply refers to the ability of an application or a system to handle a huge volume of workload or expand in response to an increased demand.
 
-With this problem, I propose 2 ways to implement:
+To solve the problem on enhancing the high availability and scalability of this case, I propose 2 ways to implement:
 - Container Architecture (Spring + Docker): 
   - Use docker to containerize services
   - Deploy spring cloud eureka server with peer awareness configuration
