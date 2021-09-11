@@ -11,8 +11,8 @@ The application is built on top of spring boot architecture, consist:
 For simplicity, I used **HashMap** instead of database to storage. It is initialized at `com/tech/interview/storage/PoolStorage.java`
 
 ### Calculate quantile
-To calculate quantile value I use nearest-rank algorithm [https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method
-](https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method)
+To calculate quantile value I use nearest-rank algorithm( [https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method
+](https://en.wikipedia.org/wiki/Percentile#Worked_examples_of_the_nearest-rank_method))
 
 
 #### Implement nearest-rank algorithm
@@ -39,7 +39,7 @@ Using swagger for test endpoints: [http://localhost:8080/swagger-ui.html](http:/
 ![](assets/swagger.png)
 
 ## HA-SCALABILITY
-High Availability: High availability is when your apps remain available and accessible without any interruption and serve their intended function seamlessly.
+High Availability: High availability is when your apps remain available and accessible without any interruption and serve their intended function seamlessly. \
 Scalability: Scalability simply refers to the ability of an application or a system to handle a huge volume of workload or expand in response to an increased demand.
 
 To solve the problem on enhancing the high availability and scalability of this case, I propose 2 ways to implement:
